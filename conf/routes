@@ -1,0 +1,64 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# Houses
+GET     /                           	controllers.HouseController.index
+GET		/houses/:id/show 				controllers.HouseController.show(id: Int)
+
+# Gangs
+GET		/gangs							controllers.GangController.index
+GET		/gangs/:id/show 				controllers.GangController.show(id: Int)
+GET		/gangs/create/:houseId			controllers.GangController.create(houseId: Int)
+POST	/gangs 							controllers.GangController.submit
+GET		/gangs/:id/delete				controllers.GangController.delete(id: Int)
+
+# Fighters
+GET		/fighters 						controllers.FighterController.index
+GET		/fighters/:id/show				controllers.FighterController.show(id: Int)
+GET		/fighters/create/:id			controllers.FighterController.create(id: Int)
+POST	/fighters 						controllers.FighterController.submit
+GET		/fighters/:id/delete			controllers.FighterController.delete(id: Int)
+
+# Skills
+GET		/skills							controllers.SkillController.index
+POST	/skills 						controllers.SkillController.submit
+GET		/skills/create 					controllers.SkillController.create
+GET		/skills/:id/delete				controllers.SkillController.delete(id: Int)
+POST	/skills/add_skill				controllers.SkillController.addSkillToFighter
+GET		/skills/remove_skill/:id		controllers.SkillController.removeSkillFromFighter(id: Int)
+
+
+# Weapons
+GET		/weapons 						controllers.WeaponController.index
+GET		/weapons/:id/show				controllers.WeaponController.show(id: Int)
+POST	/weapons/add_trait				controllers.WeaponController.addTraitToWeapon
+POST	/weapons/add_cost				controllers.WeaponController.addCostToWeapon
+GET		/weapons/remove_trait/:id		controllers.WeaponController.removeTraitFromWeapon(id: Int)
+POST	/weapons/arm_weapon				controllers.WeaponController.addWeaponToFighter
+GET		/weapons/remove_weapon/:id 		controllers.WeaponController.removeWeaponFromFighter(id: Int)
+GET		/weapons/:id/remove_cost/:cost_id	controllers.WeaponController.removeCostFromWeapon(id: Int, cost_id: Int)
+
+# Wargear
+GET		/wargear						controllers.WargearController.index 
+GET 	/wargear/:id/show				controllers.WargearController.show(id: Int)
+GET		/wargear/create					controllers.WargearController.create
+POST	/Wargear 						controllers.WargearController.submit
+GET		/wargear/:id/delete				controllers.WargearController.delete(id: Int)
+POST	/wargear/add_gear				controllers.WargearController.addGearToFighter
+GET 	/wargear/remove_gear/:id 		controllers.WargearController.removeGearFromFighter(id: Int)
+POST	/wargear/add_cost				controllers.WargearController.addCostToGear
+GET		/wargear/remove_cost/:id/		controllers.WargearController.removeCostFromGear(id: Int)
+
+# Combi Weapons
+GET 	/combis							controllers.CombiController.index
+POST 	/combis							controllers.CombiController.submit
+GET 	/combis/:id/delete				controllers.CombiController.delete(id: Int)
+GET 	/combis/:id/show				controllers.CombiController.show(id: Int)
+POST	/combis/add_weapon				controllers.CombiController.addWeaponToCombi
+GET 	/combis/remove_weapon/:id		controllers.CombiController.removeWeaponFromCombi(id: Int)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               	controllers.Assets.versioned(path="/public", file: Asset)

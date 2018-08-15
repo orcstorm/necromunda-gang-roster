@@ -1,0 +1,35 @@
+@(gear: models.Wargear, costs: List[models.WargearCost], wargearCostForm: Form[models.WargearCost], houses: List[Tuple2[String, String]], houseMap: Map[Int, String])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromunda Manager -- Wargear Editor -- gear.name") {
+	<div class="lead">@gear.name</div>
+	<p>
+		  <b>description</b><br/>
+		  @gear.description <br/>
+	</p>
+
+	<p><div class="lead">Costs</div></p>
+        <table class="table">
+          @for(cost <- costs) {
+            <tr>
+              <td>@houseMap(cost.houseId)</td>
+              <td>@cost.credits</td>
+              <td><a href="@routes.WargearController.removeCostFromGear(cost.id)">remove cost</a></td>
+            </tr>
+          }
+        </table>
+	
+	<p><div class="lead">Add a Cost</div><br />
+        @helper.form(action = routes.WargearController.addCostToGear) {
+          <fieldset>
+            <input type="hidden" name="id" value="0"/>
+            @helper.select(
+              field = wargearCostForm("houseId"),
+              options = houses,
+              'class -> "form-control")
+            <input type="hidden" name="wargearId" value="@gear.id"/>
+            @helper.inputText(wargearCostForm("credits"))
+            <input type="submit" class="btn btn-primary" value="submit">
+          </fieldset>
+        }
+	</p>
+}

@@ -1,0 +1,21 @@
+@(house: models.House, gangs: List[Tuple2[models.Gang, Int]])
+
+@main("NecroManager") {
+  <div class="lead"><p>@house.name</p></div>
+  <h4>Gangs</h4>
+  <table class="table">
+  	<tr>
+  	  <th>name</th>
+  	  <th>credits</th>
+  	  <th/>
+  	</tr>
+    @for(gang <- gangs) {
+      <tr>
+  	    <td><a href="@routes.GangController.show(gang._1.id)"><div class="lead">@gang._1.name</div></a></td>
+  	    <td>@gang._2</td>
+  	    <td><a href="@routes.GangController.delete(gang._1.id)" class="btn btn-danger">Delete Gang</a></td>
+  	  </tr>
+    }
+  </table>
+  <a class="btn btn-primary" href="@routes.GangController.create(house.id)">Found Gang</a>
+}

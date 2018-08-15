@@ -1,0 +1,24 @@
+@(weapons: List[models.WeaponWithTraits])
+
+@main("Weapons Editor") {
+
+<p><div ="lead">Weapons Editor</div></p>
+
+<table class="table">
+  <tr>
+  	<th>type</th>
+  	<th>name</th>
+  	<th>variant</th>
+  	<th>cost</th>
+  	<th>traits</th>
+  </tr>
+  @for(weapon <- weapons) {
+    <tr>
+      <td>@weapon.weapon.weaponType</td>
+      <td><a href="@routes.WeaponController.show(weapon.weapon.id)">@weapon.weapon.name</a></td>
+      <td>@weapon.weapon.variant</td>
+      <td/>	
+      <td>@for(t <- weapon.traits) { @(t._2 + ", ") }</td>
+    </tr>
+  }
+}

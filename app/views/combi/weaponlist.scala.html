@@ -1,0 +1,39 @@
+@(weapons: Map[Int, Weapon])
+
+<table class="table">
+  <tr>
+  	<th>class</th>
+  	<th>name</th>
+  	<th>variant</th>
+  	<th>rs</th>
+  	<th>rl</th>
+  	<th>accs</th>
+  	<th>accl</th>
+  	<th>s</th>
+  	<th>ap</th>
+  	<th>d</th>
+  	<th>am</th>
+  	<th>traits</th>
+  </tr>
+  @for(weapon <- weapons) {
+    <tr>
+      <td>@weapon._2.weaponType</td>
+      <td><a href="@routes.WeaponController.show(weapon._2.id)">@weapon._2.name</a></td>
+      <td>@weapon._2.variant</td>
+      <td>@weapon._2.rangeShort</td>
+      <td>@weapon._2.rangeLong</td>
+      <td>@weapon._2.accuracyShort</td>
+      <td>@weapon._2.accuracyLong</td>
+      <td>@weapon._2.strength</td>
+      <td>@weapon._2.armorPenetration</td>
+      <td>@weapon._2.damage</td>
+      <td>@weapon._2.ammo</td>
+      <td>traits</td>
+      <td>
+        <a href="@routes.CombiController.removeWeaponFromCombi(weapon._1)">
+          <div class="glyphicon glyphicon-trash"></div>
+        </a>
+      </td>
+    </tr>
+  }
+</table>

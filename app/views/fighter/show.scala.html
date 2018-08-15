@@ -1,0 +1,107 @@
+@(house: models.House, 
+  gang: models.Gang, 
+  fighter: models.Fighter, 
+  fighterProfile: models.FighterProfile, 
+  weapons: List[Tuple2[String, String]], 
+  weaponForm: Form[models.FighterWeapon], 
+  weaponsArmed: Map[Int, Tuple2[models.Weapon, Int]], 
+  cost: Int, 
+  fighterSkillForm: Form[FighterSkill], 
+  skills: List[Tuple2[String, String]], 
+  fighterSkills: List[models.FighterSkill], 
+  skillMap: Map[Int, String],
+  wargear: List[Tuple2[String, String]],
+  fighterWargearForm: Form[models.FighterWargear],
+  fighterWargear: List[models.FighterWargear],
+  fighterWargearMap: Map[Int, String],
+  gearCostMap: Map[Int, Int]
+  )(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+
+@main("Necro-Manager -- " + fighter.name) {
+  <p>
+    <div class="lead"><a href="@routes.HouseController.show(house.id)">@house.name</a> >
+    <a href="@routes.GangController.show(gang.id)">@gang.name</a> > Ganger</div>
+  </p>
+  
+  <p>
+    <b>@fighter.name</b><br />
+    @fighterProfile.fighterClass (@cost credits)<br/>
+    <a href="#" class="glyphicon glyphicon-trash"></a>
+  </p>
+
+  <p>
+    <div class="lead"><b>Attributes</b></div>
+    @profile(fighterProfile, cost)
+  </p>
+
+  <p>
+    <div class="lead"><b>Weapons</b></div>
+    @weaponList(weaponsArmed)
+  </p>
+  
+  <table class="table">
+    <tr>
+      <td>
+        <p>
+          <div class="lead"><b>Wargear</b></div>
+          @for(gear <- fighterWargear) {
+            <a href="@routes.WargearController.show(gear.wargearId)">@fighterWargearMap(gear.wargearId)</a>
+            @if(gearCostMap.contains(gear.wargearId)){ @gearCostMap(gear.wargearId) } else { 0 }
+            credits
+            <a href="@routes.WargearController.removeGearFromFighter(gear.id)">
+              <div class="glyphicon glyphicon-trash"></div>
+            </a>
+            <br />
+          }
+        </p>
+      </td>
+      <td>
+        <p>
+          <div class="lead"><b>Skills</b></div>
+          @for(fighterSkill <- fighterSkills) {
+            @skillMap(fighterSkill.skillId)
+            <a href="@routes.SkillController.removeSkillFromFighter(fighterSkill.id)">
+              <div class="glyphicon glyphicon-trash"></div>
+            </a>
+          }
+        </p>
+      </td>
+    </tr>
+  <br/>
+
+  <table class="table">
+    <tr>
+      <td width="33%">
+        <p><div class="lead">Add Weapon</div>
+
+        @helper.form(action = routes.WeaponController.addWeaponToFighter()) {
+      	  <input type="hidden" name="id" value="0"/>
+          <input type="hidden" name="fighterId" value='@fighter.id'/>
+          @helper.select(field = weaponForm("weaponId"), options = weapons, 'class -> "form-control")
+          <button type="submit" class="btn btn-default">Add Weapon</button>
+        }
+        </p>
+      </td>
+      <td width="33%">
+        <p><div class="lead">Add Skill</div></p>
+        @helper.form(action = routes.SkillController.addSkillToFighter()) {
+          <input type="hidden" name="id" value="0"/>
+          <input type="hidden" name="fighterId" value='@fighter.id'/>
+          @helper.select( field = fighterSkillForm("skillId"), options = skills, 'class -> "form-control")
+          <button type="submit" class="btn btn-default">Add Skill</button>    
+        } 
+      </td>
+      <td width="33%">
+        <p><div class="lead">Add Wargear</div></p>
+        @helper.form(action = routes.WargearController.addGearToFighter()) {
+          <input type="hidden" name="id" value="0"/>
+          <input type="hidden" name="fighterId" value='@fighter.id'/>
+          @helper.select( field = fighterWargearForm("wargearId"), options = wargear, 'class -> "form-control")
+          <button type="submit" class="btn btn-default">Add Gear</button>    
+        } 
+      </td>
+    </tr>
+  <table>
+
+}

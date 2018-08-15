@@ -1,0 +1,18 @@
+@(wargear: List[models.Wargear])
+
+@main("wargear editor") {
+	<table class="table">
+		<tr>
+			<td width="15%">name</td>
+			<td>description</td>
+			<td width="5%" />
+		</tr>
+		@for(wg <- wargear) {
+			<tr>
+				<td><a href="@routes.WargearController.show(wg.id)">@wg.name</a></td>
+				<td>@wg.description</td>
+				<td><a href="@routes.WargearController.delete(wg.id)"><div class="glyphicon glyphicon-trash"></div></a></td>
+		}
+	</table>
+	<a href="@routes.WargearController.create" class="btn btn-primary">Add Gear</a>
+}

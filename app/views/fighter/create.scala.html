@@ -1,0 +1,25 @@
+@(fighterForm: Form[Fighter], house: models.House, gang: models.Gang, profiles: List[Tuple2[String, String]])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromanager --- Create a Fighter") {
+
+  @profiles
+  <h1>@house.name</h1>
+  <h2>@gang.name</h2>
+  <h3>Create a Fighter</h3>
+
+  @helper.form(action = routes.FighterController.submit()) {
+  	<fieldset>
+      @helper.inputText(fighterForm("name"), 'class -> "form-control")
+      
+      @helper.select(
+        field = fighterForm("fighterType"),
+        options = profiles, 
+        'class -> "form-control")
+
+      <input type="hidden" name="id" value="0"/>
+      <input type="hidden" name="gangId" value='@gang.id'/>
+      <input type="submit" class="btn btn-primary" value="submit">		
+  	</fieldset>
+  }
+
+}

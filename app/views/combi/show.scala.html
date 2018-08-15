@@ -1,0 +1,22 @@
+@(combi: models.Combi, combiWeaponForm: Form[CombiWeapon], weaponList: List[Tuple2[String, String]], weaponsCombined: Map[Int, models.Weapon])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromanager -- Combi Weapon Editor") {
+  <p><div class="lead">@combi.name</div></p>
+  <p><div class="lead">sub weapons</div></p>
+  
+  @weaponlist(weaponsCombined)
+
+
+  <p><div class="lead">Add Weapon to Combi</div></p>
+
+  @helper.form(action = routes.CombiController.addWeaponToCombi) {
+    <input type="hidden" name="id" value="0"/>
+    <input type="hidden" name="combiId" value="@combi.id" />
+    @helper.select( field = combiWeaponForm("weaponId"), options = weaponList, 'class -> "form-control")
+    <button type="submit" class="btn btn-default">Add Sub Weapon</button> 
+  }
+  </p>
+
+  <p><div class="lead">Add Cost</div></p>
+
+}

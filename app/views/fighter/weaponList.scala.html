@@ -1,0 +1,40 @@
+@(weapons: Map[Int, Tuple2[models.Weapon, Int]])
+
+<table class="table">
+  <tr>
+  	<th>class</th>
+  	<th>name</th>
+  	<th>variant</th>
+  	<th>rs</th>
+  	<th>rl</th>
+  	<th>accs</th>
+  	<th>accl</th>
+  	<th>s</th>
+  	<th>ap</th>
+  	<th>d</th>
+  	<th>am</th>
+    <th>cost</th>
+  	<th/>
+  </tr>
+  @for(weapon <- weapons) {
+    <tr>
+      <td>@weapon._2._1.weaponType</td>
+      <td><a href="@routes.WeaponController.show(weapon._2._1.id)">@weapon._2._1.name</a></td>
+      <td>@weapon._2._1.variant</td>
+      <td>@weapon._2._1.rangeShort</td>
+      <td>@weapon._2._1.rangeLong</td>
+      <td>@weapon._2._1.accuracyShort</td>
+      <td>@weapon._2._1.accuracyLong</td>
+      <td>@weapon._2._1.strength</td>
+      <td>@weapon._2._1.armorPenetration</td>
+      <td>@weapon._2._1.damage</td>
+      <td>@weapon._2._1.ammo</td>
+      <td>@weapon._2._2</td>
+      <td>
+        <a href="@routes.WeaponController.removeWeaponFromFighter(weapon._1)">
+          <div class="glyphicon glyphicon-trash"></div>
+        </a>
+      </td>
+    </tr>
+  }
+</table>

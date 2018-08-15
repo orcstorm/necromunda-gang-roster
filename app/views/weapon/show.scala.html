@@ -1,0 +1,95 @@
+@(weapon: models.Weapon, traits: List[Tuple2[String, String]], weaponTraitForm: Form[models.WeaponsTraits], weaponsTraits: Map[Int,String], weaponCostForm: Form[models.WeaponCost], houses: List[Tuple2[String, String]], weaponCosts: List[models.WeaponCost], houseMap: Map[Int, String])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Weapon -- weapon.name") {
+	
+  <p><div ="lead">Weapons Editor - @weapon.name @weapon.variant</div> 
+    <a href="@routes.WeaponController.show(weapon.id  + 1)">next</a>
+  </p> 
+
+  <table class="table">
+    <tr>
+    	<th>class</th>
+    	<th>name</th>
+    	<th>variant</th>
+    	<th>rs</th>
+    	<th>rl</th>
+    	<th>accs</th>
+    	<th>accl</th>
+    	<th>s</th>
+    	<th>ap</th>
+    	<th>d</th>
+    	<th>am</th>
+    </tr>
+  	<tr>
+  	  <td>@weapon.weaponType</td>
+  	  <td>@weapon.name</td>
+  	  <td>@weapon.variant</td>
+  	  <td>@weapon.rangeShort</td>
+  	  <td>@weapon.rangeLong</td>
+  	  <td>@weapon.accuracyShort</td>
+  	  <td>@weapon.accuracyLong</td>
+  	  <td>@weapon.strength</td>
+  	  <td>@weapon.armorPenetration</td>
+  	  <td>@weapon.damage</td>
+  	  <td>@weapon.ammo</td>
+  	  </td>
+  	</tr> 
+  </table>
+
+  <table class="table">
+    <tr>
+      <td width="50%">
+        <p><div class="lead">Traits</div></p>
+        <table class="table">
+          @for(t <- weaponsTraits) {
+            <tr>
+              <td>@t._2</td>
+              <td><a href="@routes.WeaponController.removeTraitFromWeapon(t._1)" class="btn btn-danger">remove trait</a></td>
+            </tr>
+          }
+        </table>
+        <p><div class="lead">Add a Trait</div></p>
+        @helper.form(action = routes.WeaponController.addTraitToWeapon) {
+          <fieldset>
+            <input type="hidden" name="id" value="0"/>
+            <input type="hidden" name="weaponId" value='@weapon.id'/>
+
+            @helper.select(
+              field = weaponTraitForm("traitId"),
+              options = traits, 
+              'class -> "form-control")
+
+            <input type="submit" class="btn btn-primary" value="submit">    
+          </fieldset>
+        }
+      </td>
+      <td width="50%">  
+        <p><div class="lead">Costs</div></p>
+        <table class="table">
+          @for(c <- weaponCosts) {
+            <tr>
+              <td>@houseMap(c.houseId)</td>
+              <td>@c.credits</td>
+              <td><a href="@routes.WeaponController.removeCostFromWeapon(weapon.id, c.id)">remove cost</a></td>
+            </tr>
+          }
+        </table>
+        <p><div class="lead">Add a Cost</div></p>
+        @helper.form(action = routes.WeaponController.addCostToWeapon) {
+          <fieldset>
+            <input type="hidden" name="id" value="0"/>
+            @helper.select(
+              field = weaponCostForm("houseId"),
+              options = houses,
+              'class -> "form-control")
+            <input type="hidden" name="weaponId" value="@weapon.id"/>
+            @helper.inputText(weaponCostForm("credits"))
+            <input type="submit" class="btn btn-primary" value="submit">
+          </fieldset>
+        }
+      </td>
+    </tr>
+  </table>
+
+}
+

@@ -1,0 +1,31 @@
+        <p><div class="lead">Add a Trait</div></p>
+
+        @helper.form(action = routes.WeaponController.addTraitToWeapon) {
+        	<fieldset>
+        	  <input type="hidden" name="id" value="0"/>
+            <input type="hidden" name="weaponId" value='@weapon.id'/>
+
+            @helper.select(
+              field = weaponTraitForm("traitId"),
+              options = traits, 
+              'class -> "form-control")
+
+            <input type="submit" class="btn btn-primary" value="submit">		
+        	</fieldset>
+        }
+
+
+        <p><div class="lead">Costs</div></p>
+
+        @helper.form(action = routes.WeaponController.addCostToWeapon) {
+          <fieldset>
+            <input type="hidden" name="id" value="0">
+            <input type="hidden" name="weaponId" value="@weapon.id">
+            @helper.select(
+              field = weaponCostForm("houseId"),
+              options = houses,
+              'class -> "form-control")
+            <input type="number" name="credits"/>
+            <input type="submit" class="btn btn-primary" value="submit">
+          </fieldset>
+        }

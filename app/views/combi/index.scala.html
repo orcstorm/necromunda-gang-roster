@@ -1,0 +1,21 @@
+@(combis: List[models.Combi], combiForm: Form[Combi])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromanager -- Combi Weapon Editor") {
+  
+  <p>
+    <div class="lead">Combis</div>
+    
+    @for(combi <- combis) {
+      <a href="@routes.CombiController.show(combi.id)">@combi.name <a href="@routes.CombiController.delete(combi.id)"><div class="glyphicon glyphicon-trash"></div></a>
+      <br /> 
+    }
+  </p>
+
+  <p>
+    Create a Combi Weapo
+      @helper.form(action = routes.CombiController.submit()) {
+        @helper.inputText(combiForm("name"), 'class -> "form-control")
+          <input type="hidden" name="id" value="0"/>
+          <button class="btn btn-default" value="submit">create</button>
+      } 
+}

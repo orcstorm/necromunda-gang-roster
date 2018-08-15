@@ -1,0 +1,15 @@
+@(gangs: List[models.Gang], houses: Map[Int, String])
+
+@main("NecroManager") {
+  <p><div class="lead"><a href="@routes.HouseController.index">Houses</a> > Gangs</div></p>
+  <table class="table">
+  	@for(gang <- gangs) {
+  	  <tr width="100%">
+  	    <td><a href="@routes.HouseController.show(gang.house)">@houses(gang.house)</a></td>
+  	    <td><a href="@routes.GangController.show(gang.id)">@gang.name</a></td>
+  	    <td>credits</td>
+  	    <td>delete</td>
+  	  </tr>
+  	}
+  </table>
+}

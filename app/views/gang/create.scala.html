@@ -1,0 +1,15 @@
+@(gangForm: Form[Gang], house: models.House)(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromanager --- Found A Gang") {
+  <h1>@house.name</h1>
+  <h2>Found a Gang</h2>
+
+  @helper.form(action = routes.GangController.submit()) {
+  	<fieldset>
+      @helper.inputText(gangForm("name"), 'class -> "form-control")
+      <input type="hidden" name="id" value="0"/>
+      <input type="hidden" name="house" value='@house.id'/>
+      <input type="submit" class="btn btn-primary" value="submit">		
+  	</fieldset>
+  }
+}

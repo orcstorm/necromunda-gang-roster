@@ -1,0 +1,46 @@
+@(house: models.House, gang: models.Gang, summaries: List[models.FighterSummary], cost: Int))
+
+
+@main("NecroManager") {
+  <p><div class="lead"><a href="@routes.HouseController.show(house.id)">@house.name</a> > @gang.name (@cost cedits)</div></p>
+
+  
+  <h3>fighters</h3>
+  <table class="table">
+  	<tr>
+  	  <th>name</th>
+  	  <th>type</th>
+  	  <th>weapons</th>
+      <th>wargear</th>
+      <th>skills</th>
+  	  <th>credits</th>
+      <th/>
+  	</tr>
+  	@for(fighter <- summaries) {
+  	  <tr>
+  	  	<td><a href="@routes.FighterController.show(fighter.id)">@fighter.name</a></td>
+  	  	<td>@fighter.fighterType</td>
+  	  	<td>
+        @for(weapon <- fighter.weaponsArmed) {
+          @weapon._2._1.name 
+          <br />
+        }
+        </td>
+        <td>@for(gear <- fighter.wargear){
+          @gear
+          <br />
+        }
+        </td>
+        <td>
+        @for(skill <- fighter.skills) {
+          @skill 
+          <br />
+        }
+        </td>
+  	  	<td>@fighter.cost</td>
+        <td><a href="@routes.FighterController.delete(fighter.id)"><div class="glyphicon glyphicon-trash"></div></a></td>
+  	  </tr>
+    }
+  </table>
+  <a href="@routes.FighterController.create(gang.id)" class="btn btn-primary">add a fighter</a>  
+}
