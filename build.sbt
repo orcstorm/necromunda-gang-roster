@@ -2,7 +2,7 @@ name := """necromunda"""
 
 organization := "net.orcstorm"
 
-version := "1.0-SNAPSHOT"
+version := "Alpha_1.0.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
