@@ -109,4 +109,21 @@ object Forms {
     (CombiWeapon.apply)(CombiWeapon.unapply)
   )
 
+  val combiCostForm = Form(
+    mapping(
+    "id" -> number,
+    "houseId" -> number,
+    "combiId" -> number,
+    "credits" -> number)
+    (CombiCost.apply)(CombiCost.unapply)
+  )
+
+  val combiFighterForm = Form(
+    mapping(
+      "id" -> number,
+      "fighterId" -> number,
+      "combiId" -> number)
+    (CombiFighter.apply)(CombiFighter.unapply)
+  )
+
 }

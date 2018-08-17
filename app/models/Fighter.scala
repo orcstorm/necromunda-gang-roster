@@ -12,7 +12,7 @@ import scala.concurrent.Future
 
 case class Fighter(id: Int, gangId: Int, name: String, fighterType: Int)
 
-case class FighterSummary(id: Int, name: String, fighterType: String, weaponsArmed: Map[Int, Tuple2[Weapon, Int]], skills: List[String], wargear: List[String], cost: Int)
+case class FighterSummary(id: Int, name: String, fighterType: String, weaponsArmed: Map[Int, Tuple2[Weapon, Int]], skills: List[String], wargear: List[String], combis: Map[Int, Tuple3[Combi, List[Weapon], Int]], cost: Int)
 
 class FighterRepo @Inject()(
     profileRepo: FighterProfileRepo,
@@ -21,7 +21,8 @@ class FighterRepo @Inject()(
     weaponRepo: WeaponRepo,
     weaponCostRepo: WeaponCostRepo, 
     wargearCostRepo: WargearCostRepo,
-    fighterSkillRepo: FighterSkillRepo
+    fighterSkillRepo: FighterSkillRepo,
+    combiFighterRepo: CombiFighterRepo,
   )(protected val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
@@ -81,7 +82,7 @@ class FighterRepo @Inject()(
     list
   }
 
-  def getCost(baseCost: Int, weapons: Map[Int, Tuple2[Weapon, Int]], houseId: Int, wargear: List[FighterWargear]): Int = {
+  def getCost(baseCost: Int, weapons: Map[Int, Tuple2[Weapon, Int]], houseId: Int, wargear: List[FighterWargear], combisArmed: Map[Int, Tuple3[Combi, List[Weapon], Int]]): Int = {
 
     var cost = baseCost
     weapons.foreach { w => 
@@ -91,6 +92,11 @@ class FighterRepo @Inject()(
     wargear.foreach { g =>
       cost = cost + Await.result(wargearCostRepo.getCost(g.wargearId, houseId), 2.seconds).getOrElse(0)
     }
+
+    combisArmed.foreach { c => 
+      cost = cost + c._2._3
+    }
+
     cost
   }
 
@@ -106,10 +112,12 @@ class FighterRepo @Inject()(
     val weaponsArmed = getFighterWeapons(fighterId, houseId)
     val fighterWeapons = Await.result(fighterWargearRepo.findByFighterId(fighterId), 2.seconds)
     val gearCostMap = wargearCostRepo.getCostMap(houseId)
-    val cost = getCost(profile.cost, weaponsArmed, houseId, fighterWeapons)
     val skills = fighterSkillRepo.getFighterSkillList(fighter.id)
     val wargear = fighterWargearRepo.getFighterGearList(fighter.id)
-    new FighterSummary(fighter.id, fighter.name, profile.fighterClass, weaponsArmed, skills, wargear,cost)  
+    val combiFighters = Await.result(combiFighterRepo.findByFighterId(fighter.id), 2.seconds)
+    val combisArmed = combiFighterRepo.getCombisArmed(combiFighters, houseId)
+    val cost = getCost(profile.cost, weaponsArmed, houseId, fighterWeapons, combisArmed)
+    new FighterSummary(fighter.id, fighter.name, profile.fighterClass, weaponsArmed, skills, wargear, combisArmed, cost)  
   }
 
   def deleteByGangId(gangId: Int): Unit = {

@@ -49,7 +49,7 @@ GET		/wargear/:id/delete				controllers.WargearController.delete(id: Int)
 POST	/wargear/add_gear				controllers.WargearController.addGearToFighter
 GET 	/wargear/remove_gear/:id 		controllers.WargearController.removeGearFromFighter(id: Int)
 POST	/wargear/add_cost				controllers.WargearController.addCostToGear
-GET		/wargear/remove_cost/:id/		controllers.WargearController.removeCostFromGear(id: Int)
+GET		/wargear/remove_cost/:id		controllers.WargearController.removeCostFromGear(id: Int)
 
 # Combi Weapons
 GET 	/combis							controllers.CombiController.index
@@ -58,6 +58,10 @@ GET 	/combis/:id/delete				controllers.CombiController.delete(id: Int)
 GET 	/combis/:id/show				controllers.CombiController.show(id: Int)
 POST	/combis/add_weapon				controllers.CombiController.addWeaponToCombi
 GET 	/combis/remove_weapon/:id		controllers.CombiController.removeWeaponFromCombi(id: Int)
+POST 	/combis/add_cost				controllers.CombiController.addCostToCombi
+GET 	/combis/remove_cost/:id			controllers.CombiController.removeCostFromCombi(id: Int)
+POST	/combis/add_combi				controllers.CombiController.addCombiToFighter
+GET 	/combis/remove_combi/:id		controllers.CombiController.removeCombiFromFighter(id: Int)
 
 
 # Map static resources from the /public folder to the /assets URL path

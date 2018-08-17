@@ -21,6 +21,11 @@
   	  	<td><a href="@routes.FighterController.show(fighter.id)">@fighter.name</a></td>
   	  	<td>@fighter.fighterType</td>
   	  	<td>
+        @for(combi <- fighter.combis) {
+          [combi] @combi._2._1.name
+          <br />
+        }
+
         @for(weapon <- fighter.weaponsArmed) {
           @weapon._2._1.name 
           <br />

@@ -24,7 +24,10 @@ class FighterController @Inject()(
   fighterSkillRepo: FighterSkillRepo,
   wargearRepo : WargearRepo,
   fighterWargearRepo: FighterWargearRepo,
-  wargearCostRepo: WargearCostRepo
+  wargearCostRepo: WargearCostRepo,
+  combiRepo: CombiRepo,
+  combiCostRepo: CombiCostRepo,
+  combiFighterRepo: CombiFighterRepo
 ) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
 
@@ -47,8 +50,12 @@ class FighterController @Inject()(
     val wargearMap = wargearRepo.getWargearMap
     val fighterWargear = Await.result(fighterWargearRepo.findByFighterId(fighter.id), 2.seconds)
     val gearCostMap = wargearCostRepo.getCostMap(house.id)
-    val cost = fighterRepo.getCost(profile.cost, weaponsArmed, house.id, fighterWargear)
-    
+    val combis = Await.result(combiRepo.getCombis, 2.seconds)
+    val combiFighters = Await.result(combiFighterRepo.findByFighterId(fighter.id), 2.seconds)
+    val combisArmed = combiFighterRepo.getCombisArmed(combiFighters, house.id)
+    val cost = fighterRepo.getCost(profile.cost, weaponsArmed, house.id, fighterWargear, combisArmed)
+
+
     Ok(views.html.fighter
       .show(
         house, 
@@ -67,7 +74,10 @@ class FighterController @Inject()(
         fighterWargearForm,
         fighterWargear,
         wargearMap, 
-        gearCostMap
+        gearCostMap,
+        combiFighterForm,
+        combis, 
+        combisArmed
       )
     )
   }

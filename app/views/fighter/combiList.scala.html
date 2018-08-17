@@ -1,0 +1,35 @@
+@(combi: Tuple2[Int, Tuple3[models.Combi, List[models.Weapon], Int]])
+
+
+<table class="table">
+  <tr>
+  	<th>class</th>
+  	<th>name</th>
+  	<th>variant</th>
+  	<th>rs</th>
+  	<th>rl</th>
+  	<th>accs</th>
+  	<th>accl</th>
+  	<th>s</th>
+  	<th>ap</th>
+  	<th>d</th>
+  	<th>am</th>
+  	<th>traits</th>
+  </tr>
+  @for(weapon <- combi._2._2) {
+    <tr>
+      <td>@weapon.weaponType</td>
+      <td>@weapon.name</td>
+      <td>@weapon.variant</td>
+      <td>@weapon.rangeShort</td>
+      <td>@weapon.rangeLong</td>
+      <td>@weapon.accuracyShort</td>
+      <td>@weapon.accuracyLong</td>
+      <td>@weapon.strength</td>
+      <td>@weapon.armorPenetration</td>
+      <td>@weapon.damage</td>
+      <td>@weapon.ammo</td>
+      <td></td>
+    </tr>
+  }
+</table>
