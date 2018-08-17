@@ -1,0 +1,17 @@
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+project/project
+project/target
+db_backups
+.DS_Store
+.g8/
+build.gradle
+gradle/
+gradlew
+gradlew.bat
