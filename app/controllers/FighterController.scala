@@ -54,6 +54,7 @@ class FighterController @Inject()(
     val combiFighters = Await.result(combiFighterRepo.findByFighterId(fighter.id), 2.seconds)
     val combisArmed = combiFighterRepo.getCombisArmed(combiFighters, house.id)
     val cost = fighterRepo.getCost(profile.cost, weaponsArmed, house.id, fighterWargear, combisArmed)
+    val gangList = fighterRepo.getGangList(gang.id)
 
 
     Ok(views.html.fighter
@@ -62,22 +63,19 @@ class FighterController @Inject()(
         gang, 
         fighter, 
         profile, 
-        weapons, 
-        weaponForm, 
+        weapons,  
         weaponsArmed, 
         cost, 
-        fighterSkillForm, 
         skills, 
         fighterSkills,
         skillMap,
         wargear,
-        fighterWargearForm,
         fighterWargear,
         wargearMap, 
         gearCostMap,
-        combiFighterForm,
         combis, 
-        combisArmed
+        combisArmed,
+        gangList
       )
     )
   }

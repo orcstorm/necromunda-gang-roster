@@ -2,8 +2,12 @@
 
 
 @main("NecroManager") {
-  <p><div class="lead"><a href="@routes.HouseController.show(house.id)">@house.name</a> > @gang.name (@cost cedits)</div></p>
-
+  
+  <ol class="breadcrumb">
+    <li><a href="/">NMM</a></li>
+    <li><a href="@routes.HouseController.show(house.id)">House @house.name</a></li>
+    <li class="active">@gang.name</li>
+  </ol>
   
   <h3>fighters</h3>
   <table class="table">

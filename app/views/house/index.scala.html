@@ -1,12 +1,14 @@
 @(houses: List[models.House])
 
 @main("NecroManager") {
-  <h1>Houses</h1>
+  <ol class="breadcrumb">
+    <li class="active">NMM</li>
+  </ol>
   <table class="table">
-  	<tr width="100%">
-  	  @for(house <- houses) {
-  	    <td><a href="@routes.HouseController.show(house.id)">@house.name</a></td>
-  	  }
-  	</tr>
+    @for(house <- houses) {
+      <tr width="100%">
+  	    <td><a href="@routes.HouseController.show(house.id)">House @house.name</a></td>
+  	  </tr>
+  	}
   </table>
 }

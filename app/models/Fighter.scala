@@ -125,6 +125,15 @@ class FighterRepo @Inject()(
       Await.result(deleteById(fighter.id), 1.seconds)
     }
   }
+
+  def getGangList(gangId: Int): List[Tuple2[String, String]] = {
+    var list = List[Tuple2[String, String]]()
+    val fighters = Await.result(findByGangId(gangId), 2.seconds)
+    fighters.foreach{ fighter => 
+      list = list ::: List(Tuple2(fighter.id.toString, fighter.name))
+    }
+    list
+  }
 }
 
 

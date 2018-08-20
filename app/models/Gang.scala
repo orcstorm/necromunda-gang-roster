@@ -63,4 +63,5 @@ class GangRepo @Inject()(
     val fighterSummaries = fighterRepo.getFighterSummmaries(fighters, houseId)
     getGangCost(fighterSummaries)
   }
+
 }
