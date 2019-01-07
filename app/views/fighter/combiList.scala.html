@@ -1,4 +1,4 @@
-@(combi: Tuple2[Int, Tuple3[models.Combi, List[models.Weapon], Int]])
+@(combi: List[ArmedWeapon])
 
 
 <table class="table">
@@ -16,20 +16,29 @@
   	<th>am</th>
   	<th>traits</th>
   </tr>
-  @for(weapon <- combi._2._2) {
-    <tr>
-      <td>@weapon.weaponType</td>
-      <td>@weapon.name</td>
-      <td>@weapon.variant</td>
-      <td>@weapon.rangeShort</td>
-      <td>@weapon.rangeLong</td>
-      <td>@weapon.accuracyShort</td>
-      <td>@weapon.accuracyLong</td>
-      <td>@weapon.strength</td>
-      <td>@weapon.armorPenetration</td>
-      <td>@weapon.damage</td>
-      <td>@weapon.ammo</td>
-      <td></td>
-    </tr>
+  @for(subweapon <- combi) {
+	<tr>
+		<td>@subweapon.weapon.weaponType</td>
+		<td>@subweapon.weapon.name</td>
+		<td>@subweapon.weapon.variant</td>
+		<td>@subweapon.weapon.rangeShort</td>
+		<td>@subweapon.weapon.rangeLong</td>
+		<td>@subweapon.weapon.accuracyShort</td>
+		<td>@subweapon.weapon.accuracyLong</td>
+		<td>@subweapon.weapon.strength</td>
+		<td>@subweapon.weapon.armorPenetration</td>
+		<td>@subweapon.weapon.damage</td>
+		<td>@subweapon.weapon.ammo</td>
+		@if(subweapon.traits.size > 0) {
+		<td>
+			<ul style="list-style-type: none;">
+				@for(t <- subweapon.traits) {
+				  <li>@t</li>
+				}
+			</ul>
+		</td>
+		} else {<td></td>}
+	</tr>
+
   }
 </table>

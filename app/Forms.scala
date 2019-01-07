@@ -126,4 +126,12 @@ object Forms {
     (CombiFighter.apply)(CombiFighter.unapply)
   )
 
+  val traitForm = Form(
+    mapping(
+      "id" -> number,
+      "name" -> text,
+      "description" -> text)
+    (WeaponTrait.apply)(WeaponTrait.unapply)
+  )
+
 }

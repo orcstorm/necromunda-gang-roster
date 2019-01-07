@@ -93,4 +93,28 @@ class WeaponController @Inject()(
     Redirect(routes.WeaponController.show(id))
   }
 
+  def showTraits() = Action { implicit request =>
+    val traits = Await.result(traitsRepo.all, 2.seconds)
+    Ok(views.html.weapon.traits(traits))
+  }
+
+  def createTrait() = Action { implicit request => 
+    Ok(views.html.weapon.createTrait())
+  }
+
+  def submitTrait() = Action { implicit request => 
+    traitForm.bindFromRequest.fold (
+      formWithErrors => { BadRequest(formWithErrors.toString) },
+      weaponTrait => {
+        traitsRepo.create(weaponTrait)
+        Redirect(routes.WeaponController.showTraits)
+      }
+    )
+  }
+
+  def removeTrait(id: Int) = Action { implicit request => 
+    Await.result(traitsRepo.deleteById(id), 2.seconds)
+    Redirect(routes.WeaponController.showTraits)
+  }
+
 }

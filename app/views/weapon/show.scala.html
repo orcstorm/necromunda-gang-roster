@@ -44,7 +44,11 @@
           @for(t <- weaponsTraits) {
             <tr>
               <td>@t._2</td>
-              <td><a href="@routes.WeaponController.removeTraitFromWeapon(t._1)" class="btn btn-danger">remove trait</a></td>
+              <td>
+                <a href="@routes.WeaponController.removeTraitFromWeapon(t._1)" class="btn btn-danger">
+                   <div class="glyphicon glyphicon-trash"></div>
+                </a>
+              </td>
             </tr>
           }
         </table>

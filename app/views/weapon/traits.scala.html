@@ -1,0 +1,23 @@
+@(weaponTraits: List[models.WeaponTrait])
+
+@main("Traits Editor") { 
+  <table class="table">
+    <tr>
+      <th>trait</th>
+      <th>description</th>
+      <th/>
+    </tr>
+    @for(weaponTrait <- weaponTraits) {
+      <tr>
+        <td>@weaponTrait.name</td>
+        <td>@weaponTrait.description</td>
+        <td>
+          <a href="@routes.WeaponController.removeTrait(weaponTrait.id)">
+            <div class="glyphicon glyphicon-trash"></div>
+          </a>
+        </td>
+      </tr>
+    }
+  </table>
+  <a href="@routes.WeaponController.createTrait" class="btn btn-default">Create A Trait</a>
+}

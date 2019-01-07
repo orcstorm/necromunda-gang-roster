@@ -29,7 +29,7 @@ class WeaponRepo @Inject()(
 
   private[models] val Weapons = TableQuery[WeaponsTable]
 
-  def all: Future[List[Weapon]] = db.run(Weapons.to[List].result)
+  def all: Future[List[Weapon]] = db.run(Weapons.sortBy(_.weaponType.asc).to[List].result)
 
   def findById(weaponId: Int): Future[Option[Weapon]] = db.run(_findById(weaponId))
 
@@ -74,14 +74,14 @@ class WeaponRepo @Inject()(
     var map = Map[Int, String]()
     Await.result(weaponsTraitsRepo.getTraitIds(weaponId), 2.seconds).foreach { i =>
       val wTrait = Await.result(traitsRepo.findById(i._2), 2.seconds).get
-      map = map + (i._1 -> wTrait.weaponTrait)
+      map = map + (i._1 -> wTrait.name)
     }
     map
   }
 
 } 
 
-case class WeaponTrait(id: Int, weaponTrait: String)
+case class WeaponTrait(id: Int, name: String, description: String)
 
 class TraitsRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
 
@@ -91,23 +91,34 @@ class TraitsRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
 
   private[models] val Traits = TableQuery[TraitsTable]
 
-  def all: Future[List[WeaponTrait]] = db.run(Traits.to[List].result)
+  private[models] class TraitsTable(tag: Tag) extends Table[WeaponTrait](tag, "weapon_traits") {
+
+    def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
+    def name = column[String]("weapon_trait")
+    def description = column[String]("description")
+    def * = (id, name, description) <> (WeaponTrait.tupled, WeaponTrait.unapply)
+  }
+
+  def all: Future[List[WeaponTrait]] = db.run(_all)
+
+  private def _all: DBIO[List[WeaponTrait]] = Traits.to[List].result
+
+  def create(weaponTrait: WeaponTrait): Future[Int] = db.run(_create(weaponTrait))
+
+  private def _create(weaponTrait: WeaponTrait): DBIO[Int] = Traits returning Traits.map(_.id) += weaponTrait
 
   def findById(id: Int): Future[Option[WeaponTrait]] = db.run(_findById(id))
 
   private def _findById(id: Int): DBIO[Option[WeaponTrait]] = Traits.filter(_.id === id).result.headOption
+
+  def deleteById(id: Int): Future[Int] = db.run(_deleteById(id))
+
+  private def _deleteById(id: Int): DBIO[Int] = Traits.filter(_.id === id).delete
   
-  private[models] class TraitsTable(tag: Tag) extends Table[WeaponTrait](tag, "weapon_traits") {
-
-    def id = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    def weaponTrait = column[String]("weapon_trait")
-    def * = (id, weaponTrait) <> (WeaponTrait.tupled, WeaponTrait.unapply)
-  }
-
   def getTraitList(traits: List[WeaponTrait]): List[Tuple2[String, String]] = {
     var list = List[Tuple2[String, String]]()
     traits.foreach { t =>
-      list = list ::: List(t.id.toString() -> t.weaponTrait)
+      list = list ::: List(t.id.toString() -> t.name)
     }
     list
   } 

@@ -4,7 +4,8 @@
 
 CREATE TABLE weapon_traits (
   id integer NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  weapon_trait varchar(128) NOT NULL
+  weapon_trait varchar(128) NOT NULL,
+  description varchar(4096) NOT NULL
 )
 
 

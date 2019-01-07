@@ -1,6 +1,9 @@
 @(skills: List[models.Skill])
 
 @main("Skills Editor") {
+  <a href="@routes.SkillController.create" class="btn btn-primary">Add Skill</a>
+  <br />
+  <br />
   <table class="table">
   	<tr>
   	  <th>type</th>
@@ -17,5 +20,4 @@
 	  </tr>
 	}
   </table>
-  <a href="@routes.SkillController.create" class="btn btn-primary">Add Skill</a>
 }

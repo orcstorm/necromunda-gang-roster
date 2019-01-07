@@ -26,7 +26,11 @@
             <tr>
               <td>@houseMap(cost.houseId)</td>
               <td>@cost.credits</td>
-              <td><a href="@routes.CombiController.removeCostFromCombi(cost.id)">remove cost</a></td>
+              <td>
+                <a href="@routes.CombiController.removeCostFromCombi(cost.id)">
+                  <div class="glyphicon glyphicon-trash"></div>
+                </a>
+              </td>
             </tr>
           }
         </table>

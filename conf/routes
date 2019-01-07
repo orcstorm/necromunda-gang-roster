@@ -39,6 +39,10 @@ GET		/weapons/remove_trait/:id		controllers.WeaponController.removeTraitFromWeap
 POST	/weapons/arm_weapon				controllers.WeaponController.addWeaponToFighter
 GET		/weapons/remove_weapon/:id 		controllers.WeaponController.removeWeaponFromFighter(id: Int)
 GET		/weapons/:id/remove_cost/:cost_id	controllers.WeaponController.removeCostFromWeapon(id: Int, cost_id: Int)
+GET     /weapons/traits					controllers.WeaponController.showTraits
+GET 	/weapons/create_trait 			controllers.WeaponController.createTrait
+POST	/weapons/submit_trait			controllers.WeaponController.submitTrait
+GET 	/weapons/traits/remove_trait/:id 	controllers.WeaponController.removeTrait(id: Int)
 
 # Wargear
 GET		/wargear						controllers.WargearController.index 

@@ -28,15 +28,15 @@ class SkillRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     def * = (id, name, skillType, description) <> (Skill.tupled, Skill.unapply)
   }
 
-  def getSkills(): List[Tuple2[String, String]] = {
+  def getSkills: List[Tuple2[String, String]] = {
     var list = List[Tuple2[String, String]]()
-    Await.result(all, 2. seconds).foreach { skill =>
-      list = list ::: List(skill.id.toString -> (skill.name + " [" + skill.skillType + "]"))
+    Await.result(all, 2.seconds).foreach { skill =>
+      list = list ::: List(skill.id.toString -> s"[${skill.skillType}] ${skill.name}")
     }
     list
   }
 
-  def getSkillsMap(): Map[Int, String] = {
+  def getSkillsMap: Map[Int, String] = {
     var map = Map[Int, String]()
     getSkills.foreach { skill => map = map + (skill._1.toInt -> skill._2) }
     map
@@ -45,7 +45,7 @@ class SkillRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
   def all: Future[List[Skill]] = db.run(_all)
 
-  private def _all: DBIO[List[Skill]] = Skills.to[List].result
+  private def _all: DBIO[List[Skill]] = Skills.sortBy(_.skillType.asc).to[List].result
 
   def create(skill: Skill): Future[Int] = db.run(_create(skill))
 

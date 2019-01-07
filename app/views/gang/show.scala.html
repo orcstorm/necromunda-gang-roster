@@ -1,4 +1,4 @@
-@(house: models.House, gang: models.Gang, summaries: List[models.FighterSummary], cost: Int))
+@(house: models.House, gang: models.Gang, summaries: List[models.FighterSummary], cost: Int)
 
 
 @main("NecroManager") {
@@ -18,7 +18,7 @@
       <th>wargear</th>
       <th>skills</th>
   	  <th>credits</th>
-      <th/>
+      <th></th>
   	</tr>
   	@for(fighter <- summaries) {
   	  <tr>
@@ -26,12 +26,12 @@
   	  	<td>@fighter.fighterType</td>
   	  	<td>
         @for(combi <- fighter.combis) {
-          [combi] @combi._2._1.name
+          @combi._2.combi.name (combi)
           <br />
         }
 
         @for(weapon <- fighter.weaponsArmed) {
-          @weapon._2._1.name 
+          @weapon._2.weapon.name 
           <br />
         }
         </td>

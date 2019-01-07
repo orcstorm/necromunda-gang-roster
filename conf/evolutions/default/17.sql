@@ -11,4 +11,4 @@ CREATE TABLE combi_fighters (
 
 # --- !Downs
 
-DROP TABLE combis_fighters
+DROP TABLE combi_fighters

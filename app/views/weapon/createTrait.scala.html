@@ -1,0 +1,10 @@
+@()(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("trait editor"){
+  @helper.form(action = routes.WeaponController.submitTrait()) {
+    @helper.inputText(forms.Forms.traitForm("name"), 'class -> "form-control")
+    @helper.inputText(forms.Forms.traitForm("description"), 'class -> "form-control")
+    <input type="hidden" name="id" value="0"/>
+    <button class="btn btn-default" value="submit">create</button>
+  }
+} 

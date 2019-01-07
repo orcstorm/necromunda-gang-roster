@@ -12,7 +12,9 @@ import scala.concurrent.Future
 
 case class Fighter(id: Int, gangId: Int, name: String, fighterType: Int)
 
-case class FighterSummary(id: Int, name: String, fighterType: String, weaponsArmed: Map[Int, Tuple2[Weapon, Int]], skills: List[String], wargear: List[String], combis: Map[Int, Tuple3[Combi, List[Weapon], Int]], cost: Int)
+case class FighterSummary(id: Int, name: String, fighterType: String, weaponsArmed: Map[Int, ArmedWeapon], skills: List[String], wargear: List[String], combis: Map[Int, ArmedCombi], cost: Int)
+
+case class ArmedWeapon(weapon: Weapon, cost: Int, traits: List[String])
 
 class FighterRepo @Inject()(
     profileRepo: FighterProfileRepo,
@@ -23,6 +25,8 @@ class FighterRepo @Inject()(
     wargearCostRepo: WargearCostRepo,
     fighterSkillRepo: FighterSkillRepo,
     combiFighterRepo: CombiFighterRepo,
+    weaponsTrairsRepo: WeaponsTraitsRepo, 
+    traitsRepo: TraitsRepo
   )(protected val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
@@ -59,14 +63,15 @@ class FighterRepo @Inject()(
 
   //common functions
 
-  def getFighterWeapons(fighterId: Int, houseId: Int): Map[Int, Tuple2[Weapon, Int]] = {
-    var map = Map[Int, Tuple2[Weapon, Int]]()
+  def getFighterWeapons(fighterId: Int, houseId: Int): Map[Int, ArmedWeapon] = {
+    var map = Map[Int, ArmedWeapon]()
     val fighterWeapons = Await.result(fighterWeaponRepo.findByFighterId(fighterId), 2.seconds)
     fighterWeapons.foreach { fighterWeapon => 
       Await.result(weaponRepo.findById(fighterWeapon.weaponId), 2.seconds) match {
         case Some(weapon) => {
           val cost = Await.result(weaponCostRepo.getCost(weapon.id, houseId), 2.seconds).getOrElse(0)
-          map = map + (fighterWeapon.id -> Tuple2(weapon, cost))
+          val traits = weaponRepo.getWeaponTraits(weapon.id).values.toList
+          map = map + (fighterWeapon.id -> ArmedWeapon(weapon, cost, traits))
         }
         case None => // log this I guess?
       }
@@ -82,11 +87,11 @@ class FighterRepo @Inject()(
     list
   }
 
-  def getCost(baseCost: Int, weapons: Map[Int, Tuple2[Weapon, Int]], houseId: Int, wargear: List[FighterWargear], combisArmed: Map[Int, Tuple3[Combi, List[Weapon], Int]]): Int = {
+  def getCost(baseCost: Int, weapons: Map[Int, ArmedWeapon], houseId: Int, wargear: List[FighterWargear], combisArmed: Map[Int, ArmedCombi]): Int = {
 
     var cost = baseCost
     weapons.foreach { w => 
-      cost = cost + Await.result(weaponCostRepo.getCost(w._2._1.id, houseId), 2.seconds).getOrElse(0)
+      cost = cost + Await.result(weaponCostRepo.getCost(w._2.weapon.id, houseId), 2.seconds).getOrElse(0)
     }
 
     wargear.foreach { g =>
@@ -94,7 +99,7 @@ class FighterRepo @Inject()(
     }
 
     combisArmed.foreach { c => 
-      cost = cost + c._2._3
+      cost = cost + c._2.cost
     }
 
     cost

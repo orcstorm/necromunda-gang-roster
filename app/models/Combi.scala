@@ -143,7 +143,15 @@ case class CombiCostRepo @Inject()(protected val dbConfigProvider: DatabaseConfi
 
 case class CombiFighter(id: Int, fighterId: Int, combiId: Int)
 
-case class CombiFighterRepo @Inject()(combiWeaponRepo: CombiWeaponRepo, combiRepo: CombiRepo, weaponRepo: WeaponRepo, combiCostRepo: CombiCostRepo)(protected val dbConfigProvider: DatabaseConfigProvider) {
+case class ArmedCombi(combi: Combi, subweapons: List[ArmedWeapon], cost: Int)
+
+case class CombiFighterRepo @Inject()
+(combiWeaponRepo: CombiWeaponRepo, 
+  combiRepo: CombiRepo, 
+  weaponRepo: WeaponRepo, 
+  combiCostRepo: CombiCostRepo, 
+  weaponsTraitsRepo: WeaponsTraitsRepo,
+  traitsRepo: TraitsRepo)(protected val dbConfigProvider: DatabaseConfigProvider) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
   import dbConfig.profile.api._
@@ -173,18 +181,19 @@ case class CombiFighterRepo @Inject()(combiWeaponRepo: CombiWeaponRepo, combiRep
 
   private def _findByFighterId(id: Int): DBIO[List[CombiFighter]] = CombiFighters.filter(_.fighterId === id).to[List].result
 
-  def getCombisArmed(combis: List[CombiFighter], houseId: Int): Map[Int, Tuple3[Combi, List[Weapon], Int]] = {
-    var map = Map[Int, Tuple3[Combi, List[Weapon], Int]]()
+  def getCombisArmed(combis: List[CombiFighter], houseId: Int): Map[Int, ArmedCombi] = {
+    var map = Map[Int, ArmedCombi]()
     combis.foreach { combiFighter =>
       val combi = Await.result(combiRepo.findById(combiFighter.combiId), 2.seconds).get 
       val combiWeapons = Await.result(combiWeaponRepo.findByCombiId(combi.id), 2.seconds)
-      var list = List[Weapon]()
+      var list = List[ArmedWeapon]()
       val cost = Await.result(combiCostRepo.getCost(combi.id, houseId), 2.seconds).getOrElse(0)
       combiWeapons.foreach { combiWeapon =>
-        val weapons = Await.result(weaponRepo.findById(combiWeapon.weaponId), 2.seconds).get
-        list = list ::: List(weapons)
+        val weapon = Await.result(weaponRepo.findById(combiWeapon.weaponId), 2.seconds).get
+        val traits = weaponRepo.getWeaponTraits(weapon.id).values.toList
+        list = list ::: List(ArmedWeapon(weapon, 0, traits))
       }
-      map = map + (combiFighter.id -> Tuple3(combi, list, cost))
+      map = map + (combiFighter.id -> ArmedCombi(combi, list, cost))
     }
     map
   }
