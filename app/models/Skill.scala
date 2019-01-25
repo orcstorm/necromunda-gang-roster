@@ -98,11 +98,11 @@ class FighterSkillRepo @Inject()(skillRepo: SkillRepo)(protected val dbConfigPro
 
   private def _findById(id: Int): DBIO[Option[FighterSkill]] = FighterSkills.filter(_.id === id).result.headOption
 
-  def getFighterSkillList(id: Int): List[String] = {
+  def getFighterSkillList(fighterId: Int): List[String] = {
     var list = List[String]()
 
-    Await.result(getFighterSkills(id), 2.seconds).foreach { skill => 
-      list = list ::: List(Await.result(skillRepo.findById(skill.id), 2.seconds).get.name)
+    Await.result(getFighterSkills(fighterId), 2.seconds).foreach { skill =>
+      list = list ::: List(Await.result(skillRepo.findById(skill.skillId), 2.seconds).get.name)
     }
     list
   } 

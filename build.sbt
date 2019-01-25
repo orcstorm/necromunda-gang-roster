@@ -1,8 +1,8 @@
-name := """necromunda"""
+name := """necromunda roster manager"""
 
-organization := "net.orcstorm"
+organization := "ch.menneri"
 
-version := "Alpha_2.0.0"
+version := "v2.0.1alpha"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 

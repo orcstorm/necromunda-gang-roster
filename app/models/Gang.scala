@@ -2,10 +2,7 @@ package models
 
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
-import slick.dbio
-import slick.dbio.Effect.Read
 import slick.jdbc.JdbcProfile
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 import scala.concurrent.duration.{ Duration, DurationInt }
 import scala.concurrent.Future

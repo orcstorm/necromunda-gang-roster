@@ -18,62 +18,74 @@
 
 
 @main("Necro-Manager -- " + fighter.name) {
+
   <ol class="breadcrumb">
-    <li><a href="/">NMM</a></li>
+    <li><a href="/">Houses of Necromunda</a></li>
     <li><a href="@routes.HouseController.show(house.id)">House @house.name</a></li>
     <li><a href="@routes.GangController.show(gang.id)">@gang.name</a></li>
-    <li class="active">
-      <b>@(fighter.name)</b>, @fighterProfile.fighterClass (@cost credits)
+    <li>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Roster
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          @for(ganger <- gangList) {
+            @if(ganger._1.toInt == fighter.id) {
+              <li><a href="@routes.FighterController.show(ganger._1.toInt)"><b>@ganger._2</b></a></li>
+            } else {
+              <li><a href="@routes.FighterController.show(ganger._1.toInt)">@ganger._2</a></li>
+            }
+          }
+        </ul>
+      </div>
     </li>
   </ol>
 
-  <div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-      @gang.name 
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-      @for(ganger <- gangList) {
-        @if(ganger._1.toInt == fighter.id) {
-         <li><a href="@routes.FighterController.show(ganger._1.toInt)"><b>@ganger._2</b></a></li>
-        } else {
-        <li><a href="@routes.FighterController.show(ganger._1.toInt)">@ganger._2</a></li> 
-        }
-      }  
-    </ul>
-  </div>
+  <div class="panel panel-info">
+    <div class="panel-heading lead">
+      <b>@(fighter.name)</b>, @fighterProfile.fighterClass (@cost credits)
+    </div>
+    <div class="panel-body">
 
 
-  <div class="lead"><b>Attributes</b></div>
-    @profile(fighterProfile, cost)
+    <div class="panel panel-info">
+      <div class="panel-heading"><strong>Attributes</strong></div>
+      <div class="panel-body">
+      @profile(fighterProfile, cost)
+      </div>
+    </div>
 
-  <div class="lead"><b>Weapons</b></div>
+
     @if(weaponsArmed.isEmpty == false) {
-      @weaponList(weaponsArmed)
-    } else {
-      no weapons currently armed
+      <div class="panel panel-info">
+        <div class="panel-heading"><strong>Weapons</strong></div>
+        <div class="panel-body">@weaponList(weaponsArmed)</div>
+      </div>
     }
 
 
-  <div class="lead"><b>Combis</b></div>
-  @if(combisArmed.isEmpty == false) {
-    @for(combi <- combisArmed) {
-      <b>@combi._2.combi.name</b>
-      @combi._2.cost credits
-      <a href="@routes.CombiController.removeCombiFromFighter(combi._1)">
-        <div class="glyphicon glyphicon-trash"></div>
-      </a>
-      @combiList(combi._2.subweapons)
+    @if(combisArmed.isEmpty == false) {
 
-    } 
-  } else {
-   no combis currently armed
-  }
+      <div class="panel panel-info">
+        <div class="panel-heading"><strong>Combis</strong></div>
+        <div class="panel-body">
+          @for(combi <- combisArmed) {
+            <b>@combi._2.combi.name</b>
+            @combi._2.cost credits
+            <a href="@routes.CombiController.removeCombiFromFighter(combi._1)">
+              <div class="glyphicon glyphicon-trash"></div>
+            </a>
+            @combiList(combi._2.subweapons)
+          }
+        </div>
+      </div>
+    }
 
-  <table class="table">
-    <tr>
-      <td>
-        <div class="lead"><b>Wargear</b></div>
+    @if(fighterWargear.isEmpty == false) {
+      <div class="panel panel-info">
+        <div class="panel-heading"><strong>Wargear</strong></div>
+        <div class="panel-body">
           @for(gear <- fighterWargear) {
             <a href="@routes.WargearController.show(gear.wargearId)">@fighterWargearMap(gear.wargearId)</a>
             @if(gearCostMap.contains(gear.wargearId)){ @gearCostMap(gear.wargearId) } else { 0 }
@@ -82,65 +94,77 @@
               <div class="glyphicon glyphicon-trash"></div>
             </a>
           }
-      </td>
-      <td>
-        <div class="lead"><b>Skills</b></div>
-        @for(fighterSkill <- fighterSkills) {
-          @skillMap(fighterSkill.skillId)
-          <a href="@routes.SkillController.removeSkillFromFighter(fighterSkill.id)">
-            <div class="glyphicon glyphicon-trash"></div>
-          </a>
-        }
-      </td>
-    </tr>
-  </table>
+        </div>
+      </div>
+    }
 
-  <table class="table">
-    <tr>
-      <td style="width:25%;">
-        <div class="lead">Add Weapon</div>
-
-        @helper.form(action = routes.WeaponController.addWeaponToFighter()) {
-      	  <input type="hidden" name="id" value="0"/>
-          <input type="hidden" name="fighterId" value='@fighter.id'/>
-          @helper.select(field = forms.Forms.weaponForm("weaponId"), options = weapons, 'class -> "form-control")
-          <button type="submit" class="btn btn-default">Add Weapon</button>
-        }
-
-      </td>
-
-      <td style="width:25%;">
-
-          <div class="lead">Add Combi</div>
-          @helper.form(action = routes.CombiController.addCombiToFighter()) {
-            <input type="hidden" name="id" value="0"/>
-            <input type="hidden" name="fighterId" value='@fighter.id'/>
-            @helper.select( field = forms.Forms.combiFighterForm("combiId"), options = combis, 'class -> "form-control")
-            <button type="submit" class="btn btn-default">Add Combi</button>
+    @if(fighterSkills.isEmpty == false) {
+      <div class="panel panel-info">
+        <div class="panel-heading"><strong>Skills</strong></div>
+        <div class="panel-body">
+          @for(fighterSkill <- fighterSkills) {
+            @skillMap(fighterSkill.skillId)
+            <a href="@routes.SkillController.removeSkillFromFighter(fighterSkill.id)">
+              <div class="glyphicon glyphicon-trash"></div>
+            </a>
           }
+        </div>
+      </div>
+    }
+    </div>
+  </div>
 
-      </td>
+  <div class="panel panel-info">
+    <div class="panel-heading lead">Modify Fighter</div>
+    <div class="panel-body">
+      <table>
+        <tr>
+          <td style="width:25%;">
+            <div class="lead">Add Weapon</div>
 
-      <td style="width:25%;">
-        <div class="lead">Add Wargear</div>
-        @helper.form(action = routes.WargearController.addGearToFighter()) {
-          <input type="hidden" name="id" value="0"/>
-          <input type="hidden" name="fighterId" value='@fighter.id'/>
-          @helper.select( field = forms.Forms.fighterWargearForm("wargearId"), options = wargear, 'class -> "form-control")
-          <button type="submit" class="btn btn-default">Add Gear</button>
-        }
-      </td>
+            @helper.form(action = routes.WeaponController.addWeaponToFighter()) {
+              <input type="hidden" name="id" value="0"/>
+              <input type="hidden" name="fighterId" value='@fighter.id'/>
+              @helper.select(field = forms.Forms.weaponForm("weaponId"), options = weapons, 'class -> "form-control")
+              <button type="submit" class="btn btn-default">Add Weapon</button>
+            }
 
-      <td style="width:25%;">
-        <div class="lead">Add Skill</div>
-        @helper.form(action = routes.SkillController.addSkillToFighter()) {
-          <input type="hidden" name="id" value="0"/>
-          <input type="hidden" name="fighterId" value='@fighter.id'/>
-          @helper.select( field = forms.Forms.fighterSkillForm("skillId"), options = skills, 'class -> "form-control")
-          <button type="submit" class="btn btn-default">Add Skill</button>
-        }
-      </td>
-    </tr>
-  </table>
+          </td>
+
+          <td style="width:25%;">
+
+              <div class="lead">Add Combi</div>
+              @helper.form(action = routes.CombiController.addCombiToFighter()) {
+                <input type="hidden" name="id" value="0"/>
+                <input type="hidden" name="fighterId" value='@fighter.id'/>
+                @helper.select( field = forms.Forms.combiFighterForm("combiId"), options = combis, 'class -> "form-control")
+                <button type="submit" class="btn btn-default">Add Combi</button>
+              }
+
+          </td>
+
+          <td style="width:25%;">
+            <div class="lead">Add Wargear</div>
+            @helper.form(action = routes.WargearController.addGearToFighter()) {
+              <input type="hidden" name="id" value="0"/>
+              <input type="hidden" name="fighterId" value='@fighter.id'/>
+              @helper.select( field = forms.Forms.fighterWargearForm("wargearId"), options = wargear, 'class -> "form-control")
+              <button type="submit" class="btn btn-default">Add Gear</button>
+            }
+          </td>
+
+          <td style="width:25%;">
+            <div class="lead">Add Skill</div>
+            @helper.form(action = routes.SkillController.addSkillToFighter()) {
+              <input type="hidden" name="id" value="0"/>
+              <input type="hidden" name="fighterId" value='@fighter.id'/>
+              @helper.select( field = forms.Forms.fighterSkillForm("skillId"), options = skills, 'class -> "form-control")
+              <button type="submit" class="btn btn-default">Add Skill</button>
+            }
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
 }

@@ -30,8 +30,8 @@ class GangController @Inject()(
   def show(id: Int) = Action { implicit request: Request[AnyContent] =>
   	val gang = Await.result(gangRepo.findById(id), 2.seconds).get
     val house = Await.result(houseRepo.findById(gang.house), 2.seconds).get
-    val fighters = Await.result(fighterRepo.findByGangId(id), 2.seconds) 
-    val fighterSummaries = fighterRepo.getFighterSummmaries(fighters, house.id).sortBy(_.cost).reverse
+    val fighters = Await.result(fighterRepo.findByGangId(id), 2.seconds)
+    val fighterSummaries = fighterRepo.getFighterSummmaries(fighters, house.id)
     val cost = gangRepo.getGangCost(fighterSummaries)
     Ok(views.html.gang.show(house, gang, fighterSummaries, cost))
   }

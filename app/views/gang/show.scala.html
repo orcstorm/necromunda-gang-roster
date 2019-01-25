@@ -6,50 +6,58 @@
   <ol class="breadcrumb">
     <li><a href="/">NMM</a></li>
     <li><a href="@routes.HouseController.show(house.id)">House @house.name</a></li>
-    <li class="active">@gang.name</li>
+    <li class="active">@gang.name (@cost credits)</li>
   </ol>
   
-  <h3>fighters</h3>
-  <table class="table">
-  	<tr>
-  	  <th>name</th>
-  	  <th>type</th>
-  	  <th>weapons</th>
-      <th>wargear</th>
-      <th>skills</th>
-  	  <th>credits</th>
-      <th></th>
-  	</tr>
-  	@for(fighter <- summaries) {
-  	  <tr>
-  	  	<td><a href="@routes.FighterController.show(fighter.id)">@fighter.name</a></td>
-  	  	<td>@fighter.fighterType</td>
-  	  	<td>
-        @for(combi <- fighter.combis) {
-          @combi._2.combi.name (combi)
-          <br />
-        }
 
-        @for(weapon <- fighter.weaponsArmed) {
-          @weapon._2.weapon.name 
-          <br />
+  <div class="panel panel-info">
+    <div class="panel-heading">fighters</div>
+    <div class="pane-body">
+      <table class="table">
+        <tr>
+          <th>name</th>
+          <th>type</th>
+          <th>weapons</th>
+          <th>wargear</th>
+          <th>skills</th>
+          <th>credits</th>
+          <th></th>
+        </tr>
+        @for(fighter <- summaries) {
+          <tr>
+            <td><a href="@routes.FighterController.show(fighter.id)">@fighter.name</a></td>
+            <td>@fighter.fighterType</td>
+            <td>
+            @for(combi <- fighter.combis) {
+              @combi._2.combi.name (combi)
+              <br />
+            }
+
+            @for(weapon <- fighter.weaponsArmed) {
+              @weapon._2.weapon.name
+              @if(!weapon._2.weapon.variant.isEmpty){
+                -- @weapon._2.weapon.variant
+              }
+              <br />
+            }
+            </td>
+            <td>@for(gear <- fighter.wargear){
+              @gear
+              <br />
+            }
+            </td>
+            <td>
+            @for(skill <- fighter.skills) {
+              @skill
+              <br />
+            }
+            </td>
+            <td>@fighter.cost</td>
+            <td><a href="@routes.FighterController.delete(fighter.id)"><div class="glyphicon glyphicon-trash"></div></a></td>
+          </tr>
         }
-        </td>
-        <td>@for(gear <- fighter.wargear){
-          @gear
-          <br />
-        }
-        </td>
-        <td>
-        @for(skill <- fighter.skills) {
-          @skill 
-          <br />
-        }
-        </td>
-  	  	<td>@fighter.cost</td>
-        <td><a href="@routes.FighterController.delete(fighter.id)"><div class="glyphicon glyphicon-trash"></div></a></td>
-  	  </tr>
-    }
-  </table>
-  <a href="@routes.FighterController.create(gang.id)" class="btn btn-primary">add a fighter</a>  
+      </table>
+    </div>
+  </div>
+  <a href="@routes.FighterController.create(gang.id)" class="btn btn-primary">add a fighter</a>
 }

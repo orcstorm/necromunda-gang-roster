@@ -45,7 +45,9 @@ class FighterRepo @Inject()(
 
   def findByGangId(gangId: Int): Future[List[Fighter]] = db.run(_findByGangID(gangId))
 
-  private def _findByGangID(gangId: Int): DBIO[List[Fighter]] = Fighters.to[List].filter(_.gangId === gangId).result
+  private def _findByGangID(gangId: Int): DBIO[List[Fighter]] = {
+    Fighters.to[List].filter(_.gangId === gangId).sortBy( _.fighterType).result
+  }
 
   def deleteById(id: Int): Future[Int] = { db.run(_deleteById(id)) }
 

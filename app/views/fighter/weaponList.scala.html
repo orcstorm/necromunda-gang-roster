@@ -1,6 +1,6 @@
 @(weapons: Map[Int, models.ArmedWeapon])
 
-<table class="table">
+<table class="table table-striped ">
   <tr>
   	<th>class</th>
   	<th>name</th>
@@ -32,9 +32,7 @@
       <td>@weapon._2.weapon.ammo</td>
       @if(weapon._2.traits.size > 0) {
         <td>
-          <ul style="list-style-type: none;">
-              @for(t <- weapon._2.traits) { <li>@t</li> }
-          </ul>
+            @weapon._2.traits.mkString(", ")
         </td>
       } else {<td></td>}
       <td>@weapon._2.cost</td>
