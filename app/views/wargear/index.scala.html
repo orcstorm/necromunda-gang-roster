@@ -1,18 +1,36 @@
 @(wargear: List[models.Wargear])
 
 @main("wargear editor") {
-	<table class="table">
-		<tr>
-			<td width="15%">name</td>
-			<td>description</td>
-			<td width="5%" />
-		</tr>
-		@for(wg <- wargear) {
-			<tr>
-				<td><a href="@routes.WargearController.show(wg.id)">@wg.name</a></td>
-				<td>@wg.description</td>
-				<td><a href="@routes.WargearController.delete(wg.id)"><div class="glyphicon glyphicon-trash"></div></a></td>
-		}
-	</table>
-	<a href="@routes.WargearController.create" class="btn btn-primary">Add Gear</a>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<strong>Wargear</strong>
+			<a href="@routes.WargearController.create" class="btn btn-standard">
+				<div class="glyphicon glyphicon-plus"></div>
+			</a>
+		</div>
+		<div class="panel-body">
+			<table class="table table-bordered">
+				<thead class="thead-light">
+					<tr>
+						<td>name</td>
+						<td style="width:50%;">description</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					@for(wg <- wargear) {
+						<tr>
+							<td><a href="@routes.WargearController.show(wg.id)">@wg.name</a></td>
+							<td>@wg.description</td>
+							<td>
+								<a href="@routes.WargearController.show(wg.id)" class="btn btn-standard"><div class="glyphicon glyphicon-eye-open"></div></a>
+								<a href="@routes.WargearController.edit(wg.id)" class="btn btn-standard"><div class="glyphicon glyphicon-pencil"></div></a>
+								<a href="@routes.WargearController.delete(wg.id)" class="btn btn-danger"><div class="glyphicon glyphicon-trash"></div></a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
 }

@@ -45,6 +45,10 @@ class WargearRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   private def _deleteById(id: Int): DBIO[Int] = Wargears.filter(_.id === id).delete
 
+  def update(wargear: Wargear): Future[Int] = db.run(_update(wargear))
+
+  private def _update(wargear: Wargear): DBIO[Int] = Wargears.filter(_.id === wargear.id).update(wargear)
+
   def getWargear(): List[Tuple2[String, String]] = {
     var list = List[Tuple2[String, String]]()
     Await.result(all, 2. seconds).foreach {wg =>

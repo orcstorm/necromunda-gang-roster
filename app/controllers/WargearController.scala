@@ -50,6 +50,26 @@ class WargearController @Inject()(
     Redirect(routes.WargearController.index)
   }
 
+  def edit(id: Int) = Action { implicit request: Request[AnyContent] =>
+    Await.result(wargearRepo.findById(id), 2.seconds) match {
+      case Some(wargear) => {
+        val form = wargearForm.fill(wargear.copy())
+        Ok(views.html.wargear.edit(id, form))
+      }
+      case None => Redirect("/error")
+    }
+  }
+
+  def update() = Action { implicit request: Request[AnyContent] =>
+    wargearForm.bindFromRequest.fold (
+      formWithErrors => { BadRequest("Bad Request") },
+      wargear => {
+        val fighterId = Await.result(wargearRepo.update(wargear), 2.seconds)
+        Redirect(routes.WargearController.index)
+      }
+    )
+  }
+
   def addGearToFighter() = Action { implicit request: Request[AnyContent] =>  
     fighterWargearForm.bindFromRequest.fold(
       formWithErrors => { BadRequest("Bad Request") },

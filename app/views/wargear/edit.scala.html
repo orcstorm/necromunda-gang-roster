@@ -1,0 +1,10 @@
+@(id: Int, wargearForm: Form[models.Wargear])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromanager --- Wargear Editor") {
+  @helper.form(action = routes.WargearController.update()) {
+    @helper.inputText(wargearForm("name"), 'class -> "form-control")
+    @helper.inputText(wargearForm("description"), 'class -> "form-control")
+    <input type="hidden" name="id" value="@id"/>
+    <input type="submit" class="btn btn-primary" value="submit">
+  }
+}

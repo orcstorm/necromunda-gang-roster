@@ -3,8 +3,12 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
+# Application
+GET     /                               controllers.ApplicationController.index
+GET     /error                          controllers.ApplicationController.error
+
 # Houses
-GET     /                           	controllers.HouseController.index
+GET     /houses                         controllers.HouseController.index
 GET		/houses/:id/show 				controllers.HouseController.show(id: Int)
 
 # Gangs
@@ -28,6 +32,8 @@ GET		/skills/create 					controllers.SkillController.create
 GET		/skills/:id/delete				controllers.SkillController.delete(id: Int)
 POST	/skills/add_skill				controllers.SkillController.addSkillToFighter
 GET		/skills/remove_skill/:id		controllers.SkillController.removeSkillFromFighter(id: Int)
+GET     /skills/:id/edit                controllers.SkillController.edit(id: Int)
+POST    /skills/update                  controllers.SkillController.update
 
 
 # Weapons
@@ -54,6 +60,8 @@ POST	/wargear/add_gear				controllers.WargearController.addGearToFighter
 GET 	/wargear/remove_gear/:id 		controllers.WargearController.removeGearFromFighter(id: Int)
 POST	/wargear/add_cost				controllers.WargearController.addCostToGear
 GET		/wargear/remove_cost/:id		controllers.WargearController.removeCostFromGear(id: Int)
+GET     /wargear/:id/edit               controllers.WargearController.edit(id: Int)
+POST    /wargear/update                 controllers.WargearController.update
 
 # Combi Weapons
 GET 	/combis							controllers.CombiController.index
