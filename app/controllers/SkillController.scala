@@ -39,6 +39,27 @@ class SkillController @Inject()(
       })
   }
 
+  def edit(id: Int) = Action { implicit request =>
+    Await.result(skillRepo.findById(id), 2.seconds) match {
+      case Some(skill) => {
+        val form = skillForm.fill(skill.copy())
+        Ok(views.html.skill.edit(id, form))
+      }
+      case None => Redirect("/error")
+    }
+  }
+
+  def update = Action { implicit request: Request[AnyContent] =>
+    skillForm.bindFromRequest.fold (
+      formWithErrors => { BadRequest("Bad Request") },
+      skill => {
+        println(skill)
+        val id = Await.result(skillRepo.update(skill), 2.seconds)
+        Redirect(routes.SkillController.index)
+      }
+    )
+  }
+
   def delete(id: Int) = Action { implicit request: Request[AnyContent] =>
   	val delete = Await.result(skillRepo.deleteById(id), 2.seconds)
     Redirect(routes.SkillController.index)

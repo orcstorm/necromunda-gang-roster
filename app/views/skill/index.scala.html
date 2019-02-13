@@ -1,23 +1,37 @@
 @(skills: List[models.Skill])
 
-@main("Skills Editor") {
-  <a href="@routes.SkillController.create" class="btn btn-primary">Add Skill</a>
-  <br />
-  <br />
-  <table class="table">
-  	<tr>
-  	  <th>type</th>
-  	  <th>skill</th>
-  	  <th width="50%">description</th>
-  	</tr>
-  	
-	@for(skill <- skills) {
-	  <tr>
-	    <td>@skill.skillType</td>
-	    <td><b>@skill.name</b></td>
-	    <td>@skill.description</td>
-	    <td><a href="@routes.SkillController.delete(skill.id)" class="btn btn-danger"><div class="glyphicon glyphicon-trash"></div></a></td>
-	  </tr>
-	}
-  </table>
+@main("Skills") {
+
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<strong>Skills</strong>
+			<a href="@routes.SkillController.create" class="btn btn-standard">
+				<div class="glyphicon glyphicon-plus"></div></a>
+		</div>
+		<div class="panel-body">
+			<table class="table table-bordered">
+				<thead class="thead-light">
+				  <tr>
+						<th>type</th>
+						<th>skill</th>
+						<th width="50%">description</th>
+						<th></th>
+					</tr>
+			  </thead>
+			  <tbody>
+					@for(skill <- skills) {
+						<tr>
+							<td>@skill.skillType</td>
+							<td><b>@skill.name</b></td>
+							<td>@skill.description</td>
+							<td>
+								<a href="/skills/@skill.id/edit" class="btn btn-standard"><div class="glyphicon glyphicon-pencil"></div></a>
+							  <a href="/skills/@skill.id/delete" class="btn btn-danger"><div class="glyphicon glyphicon-trash"></div></a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
 }

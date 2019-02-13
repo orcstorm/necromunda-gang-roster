@@ -2,16 +2,18 @@
 
 
 @main("NecroManager") {
-  
-  <ol class="breadcrumb">
-    <li><a href="/">NMM</a></li>
-    <li><a href="@routes.HouseController.show(house.id)">House @house.name</a></li>
-    <li class="active">@gang.name (@cost credits)</li>
-  </ol>
-  
-
   <div class="panel panel-info">
-    <div class="panel-heading">fighters</div>
+    <div class="panel-heading">
+      <a href="@routes.HouseController.show(house.id)">
+        <strong>@house.name</strong>
+      </a>
+      @gang.name
+      </a>(@cost credits)
+      <a href="@routes.FighterController.create(gang.id)" class="btn btn-standard"><div class="glyphicon glyphicon-plus"></div></a>
+      <a href="@routes.GangController.show(gang.id)" class="btn btn-standard"><div class="glyphicon glyphicon-pencil"></div></a>
+      <a href="@routes.GangController.delete(gang.id)" class="btn btn-danger"><div class="glyphicon glyphicon-trash"></div></a>
+      <div class="lead">Roster</div>
+    </div>
     <div class="pane-body">
       <table class="table">
         <tr>
@@ -53,11 +55,15 @@
             }
             </td>
             <td>@fighter.cost</td>
-            <td><a href="@routes.FighterController.delete(fighter.id)"><div class="glyphicon glyphicon-trash"></div></a></td>
+            <td>
+              <a href="@routes.FighterController.show(fighter.id)" class="btn btn-standard"><div class="glyphicon glyphicon-eye-open"></div></a>
+              <a href="@routes.FighterController.show(fighter.id)" class="btn btn-standard"><div class="glyphicon glyphicon-edit"></div></a>
+              <a href="@routes.FighterController.delete(fighter.id)" class="btn btn-danger"><div class="glyphicon glyphicon-trash"></div></a>
+            </td>
           </tr>
         }
       </table>
     </div>
   </div>
-  <a href="@routes.FighterController.create(gang.id)" class="btn btn-primary">add a fighter</a>
+
 }

@@ -1,23 +1,30 @@
 @(house: models.House, gangs: List[Tuple2[models.Gang, Int]])
 
 @main("NecroManager") {
-  <ol class="breadcrumb">
-    <li><a href="/">NMM</a></li>
-    <li class="active">House @house.name</li>
-  </ol>
-  <table class="table">
-  	<tr>
-  	  <th>name</th>
-  	  <th>credits</th>
-      <th></th>
-  	</tr>
-    @for(gang <- gangs) {
-      <tr>
-  	    <td><a href="@routes.GangController.show(gang._1.id)">@gang._1.name</a></td>
-  	    <td>@gang._2</td>
-  	    <td><a href="@routes.GangController.delete(gang._1.id)" class="btn btn-danger">Delete Gang</a></td>
-  	  </tr>
-    }
-  </table>
-  <a class="btn btn-primary" href="@routes.GangController.create(house.id)">Found Gang</a>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <strong>@house.name</strong>
+      <a class="btn btn-standard" href="@routes.GangController.create(house.id)"><div class="glyphicon glyphicon-plus"></div></a>
+    </div>
+    <div class="panel-body">
+      <table class="table table bordered">
+        <tr>
+          <th>Gang name</th>
+          <th>cost</th>
+          <th></th>
+        </tr>
+        @for(gang <- gangs) {
+          <tr>
+            <td><strong>@gang._1.name</strong></td>
+            <td>@gang._2 credits</td>
+            <td>
+              <a href="@routes.GangController.show(gang._1.id)" class="btn btn-standard"><div class="glyphicon glyphicon-eye-open"></div></a>
+              <a href="@routes.GangController.show(gang._1.id)" class="btn btn-standard"><div class="glyphicon glyphicon-pencil"></div></a>
+              <a href="@routes.GangController.delete(gang._1.id)" class="btn btn-danger"><div class="glyphicon glyphicon-trash"></div></a>
+            </td>
+          </tr>
+        }
+      </table>
+    </div>
+  </div>
 }

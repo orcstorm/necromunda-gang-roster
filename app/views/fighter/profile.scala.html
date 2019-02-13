@@ -1,34 +1,38 @@
 @(profile: models.FighterProfile, cost: Int)
 
-<table class="table">
-  <tr>
-  	<th>move</th>
-  	<th>weapon skill</th>
-  	<th>ballistic skill</th>
-  	<th>strength</th>
-  	<th>toughness</th>
-  	<th>wounds</th>
-  	<th>initiative</th>
-  	<th>attacks</th>
-  	<th>leadership</th>
-  	<th>cool</th>
-  	<th>willpower</th>
-  	<th>intelligence</th>
-    <th>cost</th>
-  </tr>
-  <tr>
-  	<td>@(profile.move.toString + "\"")</td>
-  	<td>@(profile.weaponSkill.toString)</td>
-  	<td>@(profile.ballisticSkill.toString)</td>
-  	<td>@(profile.strength.toString)</td>
-  	<td>@(profile.toughness.toString)</td>
-  	<td>@(profile.wounds.toString)</td>
-  	<td>@(profile.initiative.toString)</td>
-  	<td>@(profile.attacks.toString)</td>
-  	<td>@(profile.leadership.toString)</td>
-  	<td>@(profile.cool.toString)</td>
-  	<td>@(profile.willpower.toString)</td>
-  	<td>@(profile.intelligence.toString)</td>
-    <td>@(profile.cost.toString)</td>
-  </tr>
+<table class="table table-bordered">
+  <thead class="thead-light">
+	  <tr>
+		<th>move</th>
+		<th>weapon skill</th>
+		<th>ballistic skill</th>
+		<th>strength</th>
+		<th>toughness</th>
+		<th>wounds</th>
+		<th>initiative</th>
+		<th>attacks</th>
+		<th>leadership</th>
+		<th>cool</th>
+		<th>willpower</th>
+		<th>intelligence</th>
+		<th>cost</th>
+	  </tr>
+  </thead>
+  <tbody>
+    <tr>
+		<td>@(profile.move.toString + "\"")</td>
+		<td>@(profile.weaponSkill.toString)</td>
+		<td>@(profile.ballisticSkill.toString)</td>
+		<td>@(profile.strength.toString)</td>
+		<td>@(profile.toughness.toString)</td>
+		<td>@(profile.wounds.toString)</td>
+		<td>@(profile.initiative.toString)</td>
+		<td>@(profile.attacks.toString)</td>
+		<td>@(profile.leadership.toString)</td>
+		<td>@(profile.cool.toString)</td>
+		<td>@(profile.willpower.toString)</td>
+		<td>@(profile.intelligence.toString)</td>
+		<td>@(profile.cost.toString)</td>
+	  </tr>
+  </tbody>
 </table>

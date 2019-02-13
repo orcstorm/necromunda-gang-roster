@@ -1,36 +1,39 @@
 @(combi: List[ArmedWeapon])
 
 
-<table class="table table-striped ">
-  <tr>
-  	<th>class</th>
-  	<th>name</th>
-  	<th>variant</th>
-  	<th>rs</th>
-  	<th>rl</th>
-  	<th>accs</th>
-  	<th>accl</th>
-  	<th>s</th>
-  	<th>ap</th>
-  	<th>d</th>
-  	<th>am</th>
-  	<th>traits</th>
-  </tr>
-  @for(subweapon <- combi) {
-	<tr>
-		<td>@subweapon.weapon.weaponType</td>
-		<td>@subweapon.weapon.name</td>
-		<td>@subweapon.weapon.variant</td>
-		<td>@subweapon.weapon.rangeShort</td>
-		<td>@subweapon.weapon.rangeLong</td>
-		<td>@subweapon.weapon.accuracyShort</td>
-		<td>@subweapon.weapon.accuracyLong</td>
-		<td>@subweapon.weapon.strength</td>
-		<td>@subweapon.weapon.armorPenetration</td>
-		<td>@subweapon.weapon.damage</td>
-		<td>@subweapon.weapon.ammo</td>
-		<td>@subweapon.traits.mkString(", ")</td>
-	</tr>
-
-  }
+<table class="table table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>class</th>
+        <th>name</th>
+        <th>variant</th>
+        <th>rs</th>
+        <th>rl</th>
+        <th>accs</th>
+        <th>accl</th>
+        <th>s</th>
+        <th>ap</th>
+        <th>d</th>
+        <th>am</th>
+        <th>traits</th>
+      </tr>
+    </thead>
+    @for(subweapon <- combi) {
+      <tbody>
+        <tr>
+          <td>@subweapon.weapon.weaponType</td>
+          <td>@subweapon.weapon.name</td>
+          <td>@subweapon.weapon.variant</td>
+          <td>@subweapon.weapon.rangeShort</td>
+          <td>@subweapon.weapon.rangeLong</td>
+          <td>@subweapon.weapon.accuracyShort</td>
+          <td>@subweapon.weapon.accuracyLong</td>
+          <td>@subweapon.weapon.strength</td>
+          <td>@subweapon.weapon.armorPenetration</td>
+          <td>@subweapon.weapon.damage</td>
+          <td>@subweapon.weapon.ammo</td>
+          <td>@subweapon.traits.mkString(", ")</td>
+        </tr>
+      </tbody>
+    }
 </table>

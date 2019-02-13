@@ -2,7 +2,7 @@
 
 @main("Necromanager --- Skills Editor") {
   	@helper.form(action = routes.SkillController.submit()) {
-  	
+
 	  	<fieldset>
 	      @helper.inputText(skillForm("name"), 'class -> "form-control")
 	      @helper.inputText(skillForm("skillType"), 'class -> "form-control")

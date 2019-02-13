@@ -59,6 +59,10 @@ class SkillRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
   private def _findById(id: Int): DBIO[Option[Skill]] = Skills.filter(_.id === id).result.headOption
 
+  def update(skill: Skill): Future[Int] = db.run(_update(skill))
+
+  private def _update(skill: Skill): DBIO[Int] = Skills.filter(_.id === skill.id).update(skill)
+
 }
 
 case class FighterSkill(id: Int, fighterId: Int, skillId: Int)

@@ -1,46 +1,52 @@
-@(weapons: Map[Int, models.ArmedWeapon])
+@(weapons: Map[Int, models.ArmedWeapon], edit: Boolean)
 
-<table class="table table-striped ">
-  <tr>
-  	<th>class</th>
-  	<th>name</th>
-  	<th>variant</th>
-  	<th>rs</th>
-  	<th>rl</th>
-  	<th>accs</th>
-  	<th>accl</th>
-  	<th>s</th>
-  	<th>ap</th>
-  	<th>d</th>
-  	<th>am</th>
-    <th>traits</th>
-    <th>cost</th>
-    <th></th>
-  </tr>
-  @for(weapon <- weapons) {
+<table class="table table-bordered">
+  <thead class="thead-light">
     <tr>
-      <td>@weapon._2.weapon.weaponType</td>
-      <td><a href="@routes.WeaponController.show(weapon._2.weapon.id)">@weapon._2.weapon.name</a></td>
-      <td>@weapon._2.weapon.variant</td>
-      <td>@weapon._2.weapon.rangeShort</td>
-      <td>@weapon._2.weapon.rangeLong</td>
-      <td>@weapon._2.weapon.accuracyShort</td>
-      <td>@weapon._2.weapon.accuracyLong</td>
-      <td>@weapon._2.weapon.strength</td>
-      <td>@weapon._2.weapon.armorPenetration</td>
-      <td>@weapon._2.weapon.damage</td>
-      <td>@weapon._2.weapon.ammo</td>
-      @if(weapon._2.traits.size > 0) {
-        <td>
-            @weapon._2.traits.mkString(", ")
-        </td>
-      } else {<td></td>}
-      <td>@weapon._2.cost</td>
-      <td>
-        <a href="@routes.WeaponController.removeWeaponFromFighter(weapon._1)">
-          <div class="glyphicon glyphicon-trash"></div>
-        </a>
-      </td>
+  	  <th>class</th>
+  	  <th>name</th>
+  	  <th>variant</th>
+  	  <th>rs</th>
+  	  <th>rl</th>
+  	  <th>accs</th>
+  	  <th>accl</th>
+  	  <th>s</th>
+  	  <th>ap</th>
+  	  <th>d</th>
+  	  <th>am</th>
+      <th>traits</th>
+      <th>cost</th>
+      @if(edit == true) { <th></th> }
     </tr>
+  </thead>
+  @for(weapon <- weapons) {
+    <tbody>
+      <tr>
+        <td>@weapon._2.weapon.weaponType</td>
+        <td><a href="@routes.WeaponController.show(weapon._2.weapon.id)">@weapon._2.weapon.name</a></td>
+        <td>@weapon._2.weapon.variant</td>
+        <td>@weapon._2.weapon.rangeShort</td>
+        <td>@weapon._2.weapon.rangeLong</td>
+        <td>@weapon._2.weapon.accuracyShort</td>
+        <td>@weapon._2.weapon.accuracyLong</td>
+        <td>@weapon._2.weapon.strength</td>
+        <td>@weapon._2.weapon.armorPenetration</td>
+        <td>@weapon._2.weapon.damage</td>
+        <td>@weapon._2.weapon.ammo</td>
+        @if(weapon._2.traits.size > 0) {
+          <td>
+              @weapon._2.traits.mkString(", ")
+          </td>
+        } else {<td></td>}
+        <td>@weapon._2.cost</td>
+        @if(edit == true) {
+          <td>
+            <a href="@routes.WeaponController.removeWeaponFromFighter(weapon._1)">
+              <div class="glyphicon glyphicon-trash"></div>
+            </a>
+          </td>
+        }
+      </tr>
+    </tbody>
   }
 </table>

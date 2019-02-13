@@ -1,0 +1,17 @@
+@(id: Int, skillForm: Form[models.Skill])(implicit request: RequestHeader, messagesProvider: MessagesProvider)
+
+@main("Necromanager --- Skills Editor") {
+
+  	@helper.form(action = routes.SkillController.update()) {
+  	
+	  	<fieldset>
+	      @helper.inputText(skillForm("name"), 'class -> "form-control")
+	      @helper.inputText(skillForm("skillType"), 'class -> "form-control")
+	      @helper.inputText(skillForm("description"), 'class -> "form-control", 'height -> "100" )
+	      <input type="hidden" name="id" value="@id"/>
+				<button type="submit" class="btn btn-standard" value="submit">
+					<div class="glyphicon glyphicon-floppy-disk"></div>
+				</button>
+	  	</fieldset>
+ 	}
+ }
